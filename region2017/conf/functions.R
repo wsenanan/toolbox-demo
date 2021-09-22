@@ -375,16 +375,22 @@ AO <- function(layers) {
     select(-layer_name) %>%
     na.omit()
 
+  rp <- AlignDataYears(layer_nm = "ao_poverty", layers_obj = layers) %>%
+    rename(region_id = rgn_id, poverty = value) %>%
+    select(-layer_name) %>%
+    left_join(r, by = c("region_id", "scenario_year"))
+
+
   ry <-
     AlignDataYears(layer_nm = "ao_need", layers_obj = layers) %>%
     rename(region_id = rgn_id, need = value) %>%
     select(-layer_name) %>%
-    left_join(r, by = c("region_id", "scenario_year"))
+    left_join(rp, by = c("region_id", "scenario_year"))
 
   # model
   ry <- ry %>%
-    mutate(Du = (1 - need) * (1 - access)) %>%
-    mutate(status = (1 - Du/2) * Sustainability)
+    mutate(Du = (1 - (need+poverty)/2) * (1 - access)) %>%
+    mutate(status = (1 - Du) * Sustainability)
 
   # status
   r.status <- ry %>%
