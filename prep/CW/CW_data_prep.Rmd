@@ -119,7 +119,7 @@ _Basic functions we will encounter and you will use often: select, mutate, filte
 #### Read in raw data files #####
 
 ## read in ices set
-data1 = read_csv(file.path(dir_cw, 'example_data/ices_secchi.csv'))
+data1 = read_csv(file.path('example_data/ices_secchi.csv'))
 
 ## quick review of dataset 
 head(data1)
@@ -221,7 +221,7 @@ mean_months_summer = mean_months %>%
 ggplot(mean_months_summer) + 
   geom_point(aes(year,mean_secchi)) +
   geom_line(aes(year,mean_secchi))+
-  facet_wrap(~bhi_id)+
+  facet_wrap(~rgn_id)+
   scale_y_continuous(limits = c(0,10))
 
 ```
